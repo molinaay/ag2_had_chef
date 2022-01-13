@@ -1,27 +1,74 @@
-package 'apache2'
 
-package 'ghostscript'
 
-package 'libapache2-mod-php'
+case node[:platform]
+when 'redhat', 'centos'
+   package 'wget'
 
-package 'mysql-server'
+  execute 'actualizar_paquetes' do
+    command  "yum install https://repo.ius.io/ius-release-el7.rpm -y"
+  end
 
-package 'php'
+  package 'httpd'
 
-package 'php-bcmath'
+  package 'ghostscript'
 
-package 'php-curl'
+  execute 'agregar_mysl_repositorio' do
+    command  "wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm"
+  end
+  execute 'agregar_mysl_repositorio' do
+    command  "md5sum mysql80-community-release-el7-3.noarch.rpm"
+  end
+  execute 'agregar_mysl_repositorio' do
+    command  "rpm -ivh mysql80-community-release-el7-3.noarch.rpm"
+  end
+  execute 'instalar_mysql' do
+    command  "yum install mysql-server -y"
+  end
+  
+  package 'mod_php73'
+  package 'php73-bcmath'
+  package 'php73-cli'
+  package 'php73-gd'
+  package 'php73-ldap'
+  package 'php73-mbstring'
+  package 'php73-mysqlnd'
+  package 'php73-soap'
 
-package 'php-imagick'
 
-package 'php-intl'
 
-package 'php-json'
+when 'ubuntu', 'debian'
 
-package 'php-mbstring'
+  package 'apache2'
 
-package 'php-mysql'
+  package 'ghostscript'
 
-package 'php-xml'
+  package 'libapache2-mod-php'
 
-package 'php-zip'
+  package 'mysql-server'
+
+  package 'php'
+
+  package 'php-bcmath'
+
+  package 'php-curl'
+
+  package 'php-imagick'
+
+  package 'php-intl'
+
+  package 'php-json'
+
+  package 'php-mbstring'
+
+  package 'php-mysql'
+
+  package 'php-xml'
+
+  package 'php-zip'
+end
+
+remote_file node[:wp_cli][:path] do
+  source 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar'
+  mode 00755
+  action :create_if_missing
+end
