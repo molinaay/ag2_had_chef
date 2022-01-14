@@ -25,3 +25,13 @@ package 'php-mysql'
 package 'php-xml'
 
 package 'php-zip'
+
+#execute 'wp_cli_download' do
+#    command 'curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar'
+#  end
+
+remote_file node[:wp_cli][:path] do
+    source 'https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar'
+    mode 00755
+    action :create_if_missing
+end

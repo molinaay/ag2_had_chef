@@ -1,3 +1,4 @@
+default[:wp_cli][:path] = '/usr/local/bin/wp'
 default['wordpress']['directorio'] = "/srv/www"
 default['wordpress']['ruta_wordpress'] = "https://wordpress.org/latest.tar.gz"
 default['wordpress']['archivo_wordpress'] = "latest.tar.gz"
